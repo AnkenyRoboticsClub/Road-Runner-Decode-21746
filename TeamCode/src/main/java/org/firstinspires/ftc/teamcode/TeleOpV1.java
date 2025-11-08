@@ -70,6 +70,7 @@ public class TeleOpV1 extends LinearOpMode {
         Mechanisms.Wrist wrist = new Mechanisms.Wrist(hardwareMap);
         Mechanisms.Arm arm = new Mechanisms.Arm(hardwareMap);
         Mechanisms.Slide slide = new Mechanisms.Slide(hardwareMap);*/
+        Mechanisms.Launcher launcher = new Mechanisms.Launcher(hardwareMap);
 
         waitForStart();
 
@@ -219,6 +220,17 @@ public class TeleOpV1 extends LinearOpMode {
                 leftBack.setPower(backLeftPower);
                 rightFront.setPower(frontRightPower);
                 rightBack.setPower(backRightPower);
+            }
+
+            if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
+                runningActions.add(new ParallelAction(
+                        launcher.startLaunch()
+                ));
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
+                runningActions.add(new ParallelAction(
+                        launcher.stopLauncher()
+                ));
             }
 
             /*if (driver2.getButton(GamepadKeys.Button.A)) {
