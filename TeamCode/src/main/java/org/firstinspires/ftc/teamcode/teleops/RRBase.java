@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantFunction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -8,15 +7,16 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Config
-@Autonomous(name = "RR_ACTION_BASE", group = "Autonomous")
-public class RRActionBase extends LinearOpMode {
+@Disabled
+@Autonomous(name = "RR_BASE", group = "Autonomous")
+public class RRBase extends LinearOpMode {
 
     // instant function example
     Servo claw;
