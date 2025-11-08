@@ -25,6 +25,7 @@ public class Mechanisms {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 launcher1.setPower(1);
+                launcher2.setPower(-1);
                 return launcher1.getPower()<1;
             }
         }
@@ -34,8 +35,9 @@ public class Mechanisms {
         public class StopLauncher implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                launcher1.setPower(1);
-                return launcher1.getPower()<1;
+                launcher1.setPower(0);
+                launcher2.setPower(0);
+                return launcher1.getPower()>0;
             }
         }
         public Action stopLauncher() {
