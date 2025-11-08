@@ -13,5 +13,33 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.RobotLog;
 
 public class Mechanisms {
-
+    //class to create a wrist
+    public static class Launcher {
+        public DcMotor launcher1;
+        public DcMotor launcher2;
+        public Launcher(HardwareMap hardwareMap) {
+            launcher1 = hardwareMap.get(DcMotor.class, "launcher1");
+            launcher2 = hardwareMap.get(DcMotor.class, "launcher2");
+        }
+        public class StartLaunch implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                launcher1.setPower(1);
+                return launcher1.getPower()<1;
+            }
+        }
+        public Action startLaunch() {
+            return new Launcher.StartLaunch();
+        }
+        public class StopLauncher implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                launcher1.setPower(1);
+                return launcher1.getPower()<1;
+            }
+        }
+        public Action stopLauncher() {
+            return new Launcher.StopLauncher();
+        }
+    }
 }
