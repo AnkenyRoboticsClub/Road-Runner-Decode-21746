@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleops;
+package org.firstinspires.ftc.teamcode.opmodes.concept;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.InstantFunction;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -41,10 +41,12 @@ public class RRBase extends LinearOpMode {
         // claw variable used for the instant function example
         claw = hardwareMap.get(Servo.class, "claw");
 
+        // set starting point
         Pose2d initialPose = new Pose2d(0, 0, 0);
+
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
-        // put pre initialize instructions here
+        // put on initialize code here
 
         waitForStart();
 
