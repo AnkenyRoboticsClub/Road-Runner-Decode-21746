@@ -38,6 +38,7 @@ public class Mechanisms {
                 return currentTime < rampUpTime;
             }
         }
+
         public Action startLaunch() {
             return new Launcher.StartLaunch();
         }
@@ -58,7 +59,7 @@ public class Mechanisms {
             private double power;
 
             public SetLauncherPower(double power) {
-                power = power;
+                this.power = power;
             }
 
             @Override
@@ -78,10 +79,7 @@ public class Mechanisms {
         }
     }
 
-
-
-
-    /*public static class Gate {
+    public static class Gate {
         public Servo gate;
         public Gate(HardwareMap hardwareMap) {
             gate = hardwareMap.get(Servo.class, "gate");
@@ -89,21 +87,22 @@ public class Mechanisms {
         public class OpenGate implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                gate.setPosition(1);
+                gate.setPosition(0.4);
                 return false;
             }
         }public Action openGate() {
             return new Gate.OpenGate();
         }
+
         public class CloseGate implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                gate.setPosition(-1);
+                gate.setPosition(0);
                 return false;
             }
         }
         public Action closeGate() {
             return new Gate.CloseGate();
         }
-    }*/
+    }
 }

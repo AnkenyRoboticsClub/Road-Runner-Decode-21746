@@ -64,6 +64,7 @@ public class TeleOpV1 extends LinearOpMode {
         Mechanisms.Arm arm = new Mechanisms.Arm(hardwareMap);
         Mechanisms.Slide slide = new Mechanisms.Slide(hardwareMap);*/
         Mechanisms.Launcher launcher = new Mechanisms.Launcher(hardwareMap);
+        Mechanisms.Gate gate = new Mechanisms.Gate(hardwareMap);
 
         waitForStart();
 
@@ -171,7 +172,7 @@ public class TeleOpV1 extends LinearOpMode {
                 double xMult = 0.5;
                 double yMult = 0.5;
                 double rMult = 0.5;
-                if (driver1.getButton(GamepadKeys.Button.Y)) {
+                if (/*driver1.getButton(GamepadKeys.Button.Y)*/false) {
                     xMult = 1;
                     yMult = 1;
                     rMult = 1;
@@ -217,7 +218,7 @@ public class TeleOpV1 extends LinearOpMode {
 
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
-                        launcher.startLaunch()
+                        launcher.setLauncherPower(0.55)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
@@ -227,9 +228,26 @@ public class TeleOpV1 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.5)
+                        launcher.setLauncherPower(0.625)
                 ));
             }
+            if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
+                runningActions.add(new ParallelAction(
+                        launcher.setLauncherPower(0.5+(driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)/5))
+                ));
+            }
+
+            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                runningActions.add(new ParallelAction(
+                        gate.openGate()
+                ));
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
+                runningActions.add(new ParallelAction(
+                        gate.closeGate()
+                ));
+            }
+
 
             /*if (driver2.getButton(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
