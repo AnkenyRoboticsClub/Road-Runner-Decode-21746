@@ -12,7 +12,7 @@ public class Mechanisms {
     public static class Launcher {
         private long startingTime = System.currentTimeMillis();
         private long currentTime = 0;
-        private final int rampUpTime =50000;
+        private final int rampUpTime =1000;
 
         public DcMotor launcher1;
         public DcMotor launcher2;
@@ -52,7 +52,34 @@ public class Mechanisms {
         public Action stopLauncher() {
             return new Launcher.StopLauncher();
         }
+
+        public class SetLauncherPower implements Action {
+            private boolean initialized = false;
+            private double power;
+
+            public SetLauncherPower(double power) {
+                power = power;
+            }
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    launcher1.setPower(-power);
+                    launcher2.setPower(power);
+                    startingTime = System.currentTimeMillis();
+                    initialized = true;
+                }
+                currentTime = System.currentTimeMillis() - startingTime;
+                return currentTime < rampUpTime;
+            }
+        }
+        public Action setLauncherPower(double launchPower) {
+            return new Launcher.SetLauncherPower(launchPower);
+        }
     }
+
+
+
 
     /*public static class Gate {
         public Servo gate;

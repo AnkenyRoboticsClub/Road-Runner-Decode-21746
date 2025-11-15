@@ -225,6 +225,11 @@ public class TeleOpV1 extends LinearOpMode {
                         launcher.stopLauncher()
                 ));
             }
+            if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
+                runningActions.add(new ParallelAction(
+                        launcher.setLauncherPower(0.5)
+                ));
+            }
 
             /*if (driver2.getButton(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
