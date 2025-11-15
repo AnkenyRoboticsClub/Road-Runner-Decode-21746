@@ -84,9 +84,6 @@ public class RRBase extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        // claw variable used for the instant function example
-        claw = hardwareMap.get(Servo.class, "claw");
-
         // set starting point
         Pose2d initialPose = new Pose2d(0, 0, 0);
 
