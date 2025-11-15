@@ -35,6 +35,7 @@ public class RRBase extends LinearOpMode {
         // this is called when making a new instance of the class
         public SetClawPos(double position) {
             this.targetPosition = position;
+
         }
 
         // this function is called when the path is ran
