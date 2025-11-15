@@ -56,7 +56,7 @@ public class TeleOpV1 extends LinearOpMode {
 
         //Gamepads
         GamepadEx driver1 = new GamepadEx(gamepad1);
-        GamepadEx driver2 = new GamepadEx(gamepad2);
+        GamepadEx driver2 = new GamepadEx(gamepad1);
 
         //Mechanisms
         /*Mechanisms.Intake intake = new Mechanisms.Intake(hardwareMap);

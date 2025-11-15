@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 @Config
 //Need the autnomous tag in order for it show up on driver station as an autonomous program
 // You can also set the name of the autonomous and the group
-@Autonomous(name = "AutoV1", group = "Autonomous")
-public class AutoV1 extends LinearOpMode {
+@Autonomous(name = "AutoGabeV1", group = "Autonomous")
+public class AutoGabeV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {

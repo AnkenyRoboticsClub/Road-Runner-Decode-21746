@@ -28,8 +28,8 @@ public class Mechanisms {
                     if(launcher1.getPower()==1){
                         return false;
                     }
-                    launcher1.setPower(1);
-                    launcher2.setPower(-1);
+                    launcher1.setPower(-1);
+                    launcher2.setPower(1);
                     startingTime = System.currentTimeMillis();
                     initialized = true;
                 }
