@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Mechanisms {
     public static class Launcher {
@@ -52,4 +53,30 @@ public class Mechanisms {
             return new Launcher.StopLauncher();
         }
     }
+
+    /*public static class Gate {
+        public Servo gate;
+        public Gate(HardwareMap hardwareMap) {
+            gate = hardwareMap.get(Servo.class, "gate");
+        }
+        public class OpenGate implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                gate.setPosition(1);
+                return false;
+            }
+        }public Action openGate() {
+            return new Gate.OpenGate();
+        }
+        public class CloseGate implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                gate.setPosition(-1);
+                return false;
+            }
+        }
+        public Action closeGate() {
+            return new Gate.CloseGate();
+        }
+    }*/
 }
