@@ -12,7 +12,7 @@ public class Mechanisms {
 
     public static class Launcher {
         private long startingTime = System.currentTimeMillis();
-        private long currentTime = 0;
+        private long timeElapsed = 0;
         private final int rampUpTime = 1000;
 
         public DcMotor launcher1;
@@ -39,8 +39,8 @@ public class Mechanisms {
                     startingTime = System.currentTimeMillis();
                     initialized = true;
                 }
-                currentTime = System.currentTimeMillis() - startingTime;
-                return currentTime < rampUpTime;
+                timeElapsed = System.currentTimeMillis() - startingTime;
+                return timeElapsed < rampUpTime;
             }
         }
 
@@ -59,28 +59,22 @@ public class Mechanisms {
             gate = hardwareMap.get(Servo.class, "gate");
         }
 
-        public class OpenGate implements Action {
+        public class SetGatePosition implements Action {
+            private double position;
+
+            public SetGatePosition(double position) {
+                this.position = position;
+            }
+
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                gate.setPosition(Gate.openPosition);
+                gate.setPosition(position);
                 return false;
             }
         }
 
-        public Action openGate() {
-            return new Gate.OpenGate();
-        }
-
-        public class CloseGate implements Action {
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                gate.setPosition(Gate.closePosition);
-                return false;
-            }
-        }
-
-        public Action closeGate() {
-            return new Gate.CloseGate();
+        public Action setGatePosition(double position) {
+            return new SetGatePosition(position);
         }
     }
 
