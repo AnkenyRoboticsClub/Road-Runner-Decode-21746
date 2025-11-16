@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "AutoRedMasonV1", group = "Autonomous")
-public class AutoRedMasonV1 extends LinearOpMode {
+@Autonomous(name = "AutoRedVackV1", group = "Autonomous")
+public class AutoRedBackV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-48, 48, Math.toRadians(308));
+        Pose2d initialPose = new Pose2d(60, -11, Math.toRadians(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
@@ -24,10 +24,7 @@ public class AutoRedMasonV1 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action path = drive.actionBuilder(initialPose)
-                .lineToX(-30)
-                .turn(Math.toRadians(180))
-                // launch
-                .strafeTo(new Vector2d(0, 30))
+                .strafeTo(new Vector2d(56,-51))
                 .build();
 
         Actions.runBlocking(new SequentialAction(path));

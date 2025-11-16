@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "AutoBackBlueV1", group = "Autonomous")
-public class AutoBackBlueV1 extends LinearOpMode {
+@Autonomous(name = "AutoBlueBackV1", group = "Autonomous")
+public class AutoBlueBackV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {

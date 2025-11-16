@@ -29,19 +29,9 @@ public class TeleOpV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        /*limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        telemetry.setMsTransmissionInterval(11);
-        limelight.pipelineSwitch(0);
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)*/
-        /*
-         * Starts polling for data.  If you neglect to call start(), getLatestResult() will return null.
-         */
-        //limelight.start();
         double xin = 0;
         double yin = 0;
 
-        // Assuming you're using StandardTrackingWheelLocalizer.java
-        // Switch this class to something else (Like TwoWheeTrackingLocalizer.java) if your configuration is different
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
 
         //Imu
@@ -58,11 +48,6 @@ public class TeleOpV1 extends LinearOpMode {
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad1);
 
-        //Mechanisms
-        /*Mechanisms.Intake intake = new Mechanisms.Intake(hardwareMap);
-        Mechanisms.Wrist wrist = new Mechanisms.Wrist(hardwareMap);
-        Mechanisms.Arm arm = new Mechanisms.Arm(hardwareMap);
-        Mechanisms.Slide slide = new Mechanisms.Slide(hardwareMap);*/
         Mechanisms.Launcher launcher = new Mechanisms.Launcher(hardwareMap);
         Mechanisms.Gate gate = new Mechanisms.Gate(hardwareMap);
 
@@ -81,81 +66,9 @@ public class TeleOpV1 extends LinearOpMode {
             telemetry.addData("Roadrunner Heading:", myPose.heading);
             RobotLog.ii("DbgLog", "Roadrunner Pose" + "(x: " + (int) myPose.position.x + ", y: " + (int) myPose.position.y + ", heading: " + myPose.heading + ")");
 
-            //Camera MT1
-            /*LLStatus status = limelight.getStatus();
-            telemetry.addData("Name", "%s",
-                    status.getName());
-            telemetry.addData("LL", "Temp: %.1fC, CPU: %.1f%%, FPS: %d",
-                    status.getTemp(), status.getCpu(), (int) status.getFps());
-            telemetry.addData("Pipeline", "Index: %d, Type: %s",
-                    status.getPipelineIndex(), status.getPipelineType());
-
-            LLResult result = limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                Pose3D botpose = result.getBotpose();
-                if (botpose != null) {
-                    double x = botpose.getPosition().x;
-                    double y = botpose.getPosition().y;
-                    xin = x * 39.37;
-                    yin = y * 39.37;
-                    telemetry.addData("MT1 Location Inches", "(xin: " + (int) xin + ", yin: " + (int) yin + ")");
-                    RobotLog.ii("DbgLog", "MT1 Location Inches" + "(xin: " + (int) xin + ", yin: " + (int) yin + ")");
-                    telemetry.addData("Heading:", "MT1: " + (int) botpose.getOrientation().getYaw(AngleUnit.DEGREES) + ", IMU: " + (int) lazyImu.get().getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-                    //fix roadrunner pose
-                    if (driver1.wasJustPressed(GamepadKeys.Button.X)) {
-                        double poseX = 0;
-                        double poseY = 0;
-                        if(yin>0) {
-                            poseX = -xin;
-                            poseY = -yin;
-                        } else {
-                            poseX = xin;
-                            poseY = yin;
-                        }
-                        double poseOrientation = lazyImu.get().getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)+Math.toRadians(90);
-                        RobotLog.ii("DbgLog", "Pose Update Conversion" + "(x: " + (int) poseX + ", y: " + (int) poseY + ")");
-                        drive.pose = new Pose2d(poseX, poseY, poseOrientation);
-                    }
-                }
-            }
-
-            double offsetOrientation = lazyImu.get().getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)+Math.toRadians(90);
-            driverControlled = !(driver1.getButton(GamepadKeys.Button.DPAD_LEFT)||driver1.getButton(GamepadKeys.Button.DPAD_UP)||driver1.getButton(GamepadKeys.Button.DPAD_DOWN)||driver1.getButton(GamepadKeys.Button.DPAD_RIGHT));
-            if (driver1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)){
-                TrajectoryActionBuilder score = drive.actionBuilder(drive.pose)
-                        .strafeToLinearHeading(new Vector2d(-47, -47), Math.toRadians(225))
-                        ;
-                runningActions.add(new ParallelAction(
-                        score.build()
-                ));
-            } else if (driver1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){
-                TrajectoryActionBuilder upperSub = drive.actionBuilder(drive.pose)
-                        .strafeToLinearHeading(new Vector2d(-25, 7), offsetOrientation)
-                        ;
-                runningActions.add(new ParallelAction(
-                        upperSub.build()
-                ));
-            } else if (driver1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)){
-                TrajectoryActionBuilder lowerSub = drive.actionBuilder(drive.pose)
-                        .strafeToLinearHeading(new Vector2d(-25, -8), offsetOrientation)
-                        ;
-                runningActions.add(new ParallelAction(
-                        lowerSub.build()
-                ));
-            } else if (driver1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)){
-                TrajectoryActionBuilder rightCorner = drive.actionBuilder(drive.pose)
-                        .strafeToLinearHeading(new Vector2d(32, -32), -45)
-                        ;
-                runningActions.add(new ParallelAction(
-                        rightCorner.build()
-                ));
-            }
-             */
-
             driver1.readButtons();
             driver2.readButtons();
 
-            //Actions from TeleOp V4
             TelemetryPacket packet = new TelemetryPacket();
 
             // update running actions
@@ -168,7 +81,7 @@ public class TeleOpV1 extends LinearOpMode {
             }
             runningActions = newActions;
 
-            if(driverControlled) {
+            if (driverControlled) {
                 double xMult = 0.5;
                 double yMult = 0.5;
                 double rMult = 0.5;
@@ -223,7 +136,7 @@ public class TeleOpV1 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
                 runningActions.add(new ParallelAction(
-                        launcher.stopLauncher()
+                        launcher.setLauncherPower(0.0)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
@@ -249,117 +162,8 @@ public class TeleOpV1 extends LinearOpMode {
             }
 
 
-            /*if (driver2.getButton(GamepadKeys.Button.A)) {
-                runningActions.add(new ParallelAction(
-                        arm.armCollect(),
-                        wrist.foldOutWrist(),
-                        intake.intakeCollect()
-                        , slide.armCollect()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.LEFT_BUMPER)) {
-                runningActions.add(new ParallelAction(
-                        intake.intakeCollect()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.B)) {
-                runningActions.add(new ParallelAction(
-                        intake.intakeOff()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {
-                runningActions.add(new ParallelAction(
-                        intake.intakeDeposit()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.X)) {
-                runningActions.add(new ParallelAction(
-                        arm.armClear()
-                        , slide.armClear()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.Y)) {
-                runningActions.add(new ParallelAction(
-                        wrist.foldOutWrist()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.DPAD_LEFT)) {
-                runningActions.add(new ParallelAction(
-                        arm.armCollapse(),
-                        intake.intakeOff(),
-                        wrist.foldInWrist()
-                        , slide.armCollapse()
-                ));
-            } else if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-                runningActions.add(new ParallelAction(
-                        wrist.foldOutWrist(),
-                        arm.armScoreHigh(),
-                        slide.armScoreHigh()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
-                runningActions.add(new ParallelAction(
-                        wrist.foldOutWrist(),
-                        arm.armScoreLow(),
-                        slide.armScoreLow()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)) {
-                runningActions.add(new ParallelAction(
-                        arm.armCollectLow(),
-                        intake.intakeCollect(),
-                        wrist.foldOutWrist()
-                        , slide.armCollapse()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.DPAD_UP)) {
-                runningActions.add(new ParallelAction(
-                        arm.armAttachHangingHook(),
-                        intake.intakeOff(),
-                        wrist.foldInWrist()
-                        , slide.armAttachHangingHook()
-                ));
-            } else if (driver2.getButton(GamepadKeys.Button.DPAD_DOWN)) {
-                runningActions.add(new ParallelAction(
-                        arm.armScoreSpecimen(),
-                        wrist.foldOutWristSpecimen()
-                        , slide.armScoreSpecimen()
-                ));
-            }
-
-            //Manual Arm Adjustments
-            double rightTrig2 = driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER);
-            double leftTrig2 = driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
-            double rightJoy2 = driver2.getRightY();
-            double leftJoy2 = driver2.getLeftY();
-
-            if (driver2.wasJustPressed(GamepadKeys.Button.START)) {
-                slide.slideReset = slide.armMotor.getCurrentPosition() - slide.target;//-slide.target;
-            }
-
-            if (Math.abs(rightTrig2 - leftTrig2 + (leftJoy2 * 2)) > 0.2) {
-                arm.armPositionFudgeFactor = (int) (arm.FUDGE_FACTOR * (rightTrig2 - leftTrig2 + (leftJoy2 * 2)));
-                runningActions.add(new ParallelAction(
-                        arm.armRun()
-                ));
-            } else if (arm.armPositionFudgeFactor != 0) {
-                arm.armPositionFudgeFactor = 0;
-                runningActions.add(new ParallelAction(
-                        arm.armRun()
-                ));
-            }
-
-            if (Math.abs(rightJoy2) > 0.4) {
-                slide.armPositionFudgeFactor = (int) (slide.FUDGE_FACTOR * rightJoy2);
-                runningActions.add(new ParallelAction(
-                        slide.armRun()
-                ));
-            } else if (slide.armPositionFudgeFactor != 0) {
-                slide.armPositionFudgeFactor = 0;
-                runningActions.add(new ParallelAction(
-                        slide.armRun()
-                ));
-            }*/
-
-
-            //More telemetery
+            //More telemetry
             telemetry.addData("lazyImu: ", lazyImu.get().getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            /*telemetry.addData("arm encoder: ", arm.armMotor.getCurrentPosition());
-            telemetry.addData("arm target: ", arm.armMotor.getTargetPosition());
-            telemetry.addData("slide encoder: ", slide.armMotor.getCurrentPosition());
-            telemetry.addData("slide target: ", slide.armMotor.getTargetPosition());
-            telemetry.addData("slide reset: ", slide.slideReset);*/
             telemetry.update();
         }
     }
