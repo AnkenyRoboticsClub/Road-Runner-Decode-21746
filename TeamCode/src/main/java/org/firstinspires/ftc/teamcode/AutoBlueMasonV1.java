@@ -25,9 +25,9 @@ public class AutoBlueMasonV1 extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        initialFieldPositioning(drive, initialPose);
+        //initialFieldPositioning(drive, initialPose);
         launchArtifact(launcher, gate);
-        finalFieldPosition();
+        //finalFieldPosition();
 
     }
 
@@ -35,9 +35,10 @@ public class AutoBlueMasonV1 extends LinearOpMode {
     {
         Actions.runBlocking(launcher.setLauncherPower(0.55));
         //Wait for launcher to speed up to the desired speed
-        sleep(500);
+        sleep(1000);
         //Release ball - turn on the motor that opens the gate
         Actions.runBlocking(gate.openGate());
+        sleep(2000);
         //Stop launcher
         Actions.runBlocking(launcher.stopLauncher());
         //Close - turn on the motor that opens the gate opposite speed
@@ -55,7 +56,7 @@ public class AutoBlueMasonV1 extends LinearOpMode {
                 .lineToX(-30)
                 .turn(Math.toRadians(180))
                 // launch
-                .strafeTo(new Vector2d(0, -20))
+                //.strafeTo(new Vector2d(0, -20))
                 .build();
 
 
