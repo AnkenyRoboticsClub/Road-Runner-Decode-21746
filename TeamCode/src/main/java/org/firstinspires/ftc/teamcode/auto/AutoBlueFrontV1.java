@@ -3,12 +3,15 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
+import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
 
 @Autonomous(name = "AutoBlueFrontV1", group = "Autonomous")
 public class AutoBlueFrontV1 extends LinearOpMode {
@@ -19,18 +22,32 @@ public class AutoBlueFrontV1 extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
+        Gate gate = new Gate(hardwareMap);
+        Launcher launcher = new Launcher(hardwareMap);
+
         waitForStart();
 
         if (isStopRequested()) return;
 
-        Action path = drive.actionBuilder(initialPose)
+        Action lineUp = drive.actionBuilder(initialPose)
                 .lineToX(-30)
                 .turn(Math.toRadians(180))
-                // launch
+                .build();
+
+        Action exitLaunchZone = drive.actionBuilder(drive.localizer.getPose())
                 .strafeTo(new Vector2d(0, -20))
                 .build();
 
-        Actions.runBlocking(new SequentialAction(path));
+        Action fullAuto = new SequentialAction(
+                lineUp,
+                launcher.setLauncherPower(0.5),
+                gate.setGatePosition(Gate.openPosition),
+                new SleepAction(0.5),
+                gate.setGatePosition(Gate.closePosition),
+                exitLaunchZone
+        );
+
+        Actions.runBlocking(fullAuto);
 
     }
 

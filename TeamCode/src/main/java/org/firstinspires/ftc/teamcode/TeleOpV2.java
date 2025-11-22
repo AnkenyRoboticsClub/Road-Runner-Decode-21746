@@ -108,6 +108,7 @@ public class TeleOpV2 extends LinearOpMode {
             List<Action> newActions = new ArrayList<>();
             for (Action action : runningActions) {
                 action.preview(packet.fieldOverlay());
+                // runs all actions in runningActions list and re-adds them if they need to continue running
                 if (action.run(packet)) {
                     newActions.add(action);
                 }
@@ -118,15 +119,10 @@ public class TeleOpV2 extends LinearOpMode {
                 double xMult = 0.5;
                 double yMult = 0.5;
                 double rMult = 0.5;
-                if (/*driver1.getButton(GamepadKeys.Button.Y)*/false) {
-                    xMult = 1;
-                    yMult = 1;
-                    rMult = 1;
-                } else {
-                    xMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
-                    yMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
-                    rMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
-                }
+
+                xMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
+                yMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
+                rMult += driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)/2;
 
                 double y = -gamepad1.left_stick_y * xMult; // Remember, Y stick value is reversed
                 double x = gamepad1.left_stick_x * yMult;
@@ -179,7 +175,7 @@ public class TeleOpV2 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.5+(driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)/5))
+                        launcher.setLauncherPower(0.5 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 5)
                 ));
             }
 
@@ -195,13 +191,17 @@ public class TeleOpV2 extends LinearOpMode {
             }
             // faces detected tag
             if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+                driverControlled = false;
                 if (llResult != null && llResult.isValid()) {
-                    faceTag(currentPose, llResult.getTx());
+                    faceTag( currentPose, Math.toRadians(llResult.getTx()) );
                 }
+            }
+            if (driver2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+                driverControlled = true;
             }
 
             //More telemetry
-            telemetry.addData("imu: ", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("imu:", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             telemetry.update();
         }
     }

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,8 +13,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Mechanisms {
 
     public static class Launcher {
-        private long startingTime = System.currentTimeMillis();
-        private long timeElapsed = 0;
         private final int rampUpTime = 1000;
 
         public DcMotor launcher1;
@@ -25,6 +25,8 @@ public class Mechanisms {
 
         public class SetLauncherPower implements Action {
             private boolean initialized = false;
+            private long startingTime = System.currentTimeMillis();
+            private long timeElapsed = 0;
             private double power;
 
             public SetLauncherPower(double power) {

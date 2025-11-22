@@ -77,6 +77,7 @@ public class AprilTagTesting extends LinearOpMode {
 
             }
 
+            telemetry.update();
         }
 
     }
