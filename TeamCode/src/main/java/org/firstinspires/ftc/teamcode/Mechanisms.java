@@ -87,7 +87,7 @@ public class Mechanisms {
         public class OpenGate implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                gate.setPosition(0.4);
+                gate.setPosition(0.3);
                 return false;
             }
         }public Action openGate() {
