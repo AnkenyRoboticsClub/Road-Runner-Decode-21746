@@ -35,13 +35,12 @@ public class RRBase extends LinearOpMode {
         // this is called when making a new instance of the class
         public SetClawPos(double position) {
             this.targetPosition = position;
-
         }
 
         // this function is called when the path is ran
         @Override
         public void run() {
-                claw.setPosition(this.targetPosition);
+            claw.setPosition(targetPosition);
         }
     }
 
@@ -52,6 +51,7 @@ public class RRBase extends LinearOpMode {
         private double speed = 0.5;
         private double tolerance = 10;
         private boolean initialized = false;
+
         public LiftTo(double position) {
             this.targetPos = position;
 
@@ -65,9 +65,9 @@ public class RRBase extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             // on first time through loop set the power to the lift
-            if (!this.initialized) {
-                lift.setPower(this.speed * this.direction);
-                this.initialized = true;
+            if (!initialized) {
+                lift.setPower(speed * direction);
+                initialized = true;
             }
 
             // Continue running if outside tolerance range
@@ -111,7 +111,7 @@ public class RRBase extends LinearOpMode {
         Actions.runBlocking(new SequentialAction(path));
 
         // parallel actions run multiple actions at once
-        // will set the lift position to 100 while running the path
+        // This will set the lift position to 100 while running the path
         Actions.runBlocking(new ParallelAction(
                 path,
                 new LiftTo(100)

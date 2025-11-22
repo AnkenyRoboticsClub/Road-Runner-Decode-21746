@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "AutoBackRedV1", group = "Autonomous")
-public class AutoBackRedV1 extends LinearOpMode {
+@Autonomous(name = "AutoBlueBackV1", group = "Autonomous")
+public class AutoBlueBackV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(60, -11, Math.toRadians(180));
+        Pose2d initialPose = new Pose2d(60, 11, Math.toRadians(180));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
@@ -24,7 +24,7 @@ public class AutoBackRedV1 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action path = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(56,-51))
+                .strafeTo(new Vector2d(56,51))
                 .build();
 
         Actions.runBlocking(new SequentialAction(path));

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "AutoRedMasonV1", group = "Autonomous")
-public class AutoRedMasonV1 extends LinearOpMode {
+@Autonomous(name = "AutoRedFrontV1", group = "Autonomous")
+public class AutoRedFrontV1 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
