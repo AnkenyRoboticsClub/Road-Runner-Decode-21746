@@ -54,7 +54,7 @@ public class Mechanisms {
     public static class Gate {
         public Servo gate;
 
-        public static double openPosition = 0.4;
+        public static double openPosition = 0.3;
         public static double closePosition = 0.0;
 
         public Gate(HardwareMap hardwareMap) {
