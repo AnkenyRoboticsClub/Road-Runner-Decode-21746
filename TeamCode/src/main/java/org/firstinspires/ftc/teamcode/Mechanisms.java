@@ -6,38 +6,41 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.RobotLog;
 
 public class Mechanisms {
 
     public static class Launcher {
         private final int rampUpTime = 1000;
 
-        public DcMotor launcher1;
-        public DcMotor launcher2;
+        public DcMotorEx launcher1;
+        public DcMotorEx launcher2;
 
         public Launcher(HardwareMap hardwareMap) {
-            launcher1 = hardwareMap.get(DcMotor.class, "launcher1");
-            launcher2 = hardwareMap.get(DcMotor.class, "launcher2");
+            launcher1 = hardwareMap.get(DcMotorEx.class, "launcher1");
+            launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
         }
 
-        public class SetLauncherPower implements Action {
+        public class SetLauncherVelocity implements Action {
             private boolean initialized = false;
             private long startingTime = System.currentTimeMillis();
             private long timeElapsed = 0;
-            private double power;
+            private double velocity;
 
-            public SetLauncherPower(double power) {
-                this.power = power;
+            public SetLauncherVelocity(double velocity) {
+                this.velocity = velocity;
             }
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    launcher1.setPower(-power);
-                    launcher2.setPower(power);
+                    launcher1.setPower(-velocity);
+                    launcher2.setPower(velocity);
                     startingTime = System.currentTimeMillis();
                     initialized = true;
                 }
@@ -46,8 +49,16 @@ public class Mechanisms {
             }
         }
 
-        public Action setLauncherPower(double launchPower) {
-            return new Launcher.SetLauncherPower(launchPower);
+        public Action setLauncherVelocity(double velocity) {
+            return new Launcher.SetLauncherVelocity(velocity);
+        }
+
+        // This is an old method which we kept in so we don't get errors from the old teleops
+        // Do not use
+        @Deprecated
+        public Action setLauncherPower(double power) {
+            RobotLog.w("Warning: 'setLauncherPower' is a depreciated method. Use 'setLauncherVelocity'.");
+            return new SleepAction(0.0);
         }
     }
 
