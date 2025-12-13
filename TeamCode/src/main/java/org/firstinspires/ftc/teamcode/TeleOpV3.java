@@ -9,7 +9,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,8 +23,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "TeleOpV2", group = "TeleOp")
-public class TeleOpV2 extends LinearOpMode {
+@TeleOp(name = "TeleOpV3", group = "TeleOp")
+public class TeleOpV3 extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
     public Limelight3A limelight;
     public IMU imu;
@@ -159,24 +158,27 @@ public class TeleOpV2 extends LinearOpMode {
                 rightBack.setPower(backRightPower);
             }
 
+            // TODO: retune the old launcher power values for the new launcher velocity values
+            // note that the current values will be very weak
+
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.55)
+                        launcher.setLauncherVelocity(1100)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.0)
+                        launcher.setLauncherVelocity(0.0)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.625)
+                        launcher.setLauncherVelocity(1300)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherPower(0.5 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 5)
+                        launcher.setLauncherVelocity(500 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) * 1000)
                 ));
             }
 
@@ -200,6 +202,12 @@ public class TeleOpV2 extends LinearOpMode {
             if (driver2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
                 driverControlled = true;
             }
+
+            double launcher1Velocity = launcher.launcher1.getVelocity();
+            double launcher2Velocity = launcher.launcher2.getVelocity();
+
+            telemetry.addData("launcher 1 velocity", launcher1Velocity);
+            telemetry.addData("launcher 2 velocity", launcher2Velocity);
 
             //More telemetry
             telemetry.addData("imu:", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));

@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
 import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
 
-@Autonomous(name = "AutoBlueFrontV2", group = "Autonomous")
-public class AutoBlueFrontV2 extends LinearOpMode {
+@Autonomous(name = "AutoLaunchingTest", group = "Autonomous")
+public class AutoLaunchingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -39,12 +39,11 @@ public class AutoBlueFrontV2 extends LinearOpMode {
                 .build();
 
         Action fullAuto = new SequentialAction(
-                lineUp,
-                launcher.setLauncherPower(0.5),
+                launcher.setLauncherVelocity(1.0),
                 gate.setGatePosition(Gate.openPosition),
-                new SleepAction(0.5),
+                new SleepAction(1.0),
                 gate.setGatePosition(Gate.closePosition),
-                exitLaunchZone
+                new SleepAction(1.0)
         );
 
         Actions.runBlocking(fullAuto);
