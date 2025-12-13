@@ -158,9 +158,6 @@ public class TeleOpV3 extends LinearOpMode {
                 rightBack.setPower(backRightPower);
             }
 
-            // TODO: retune the old launcher power values for the new launcher velocity values
-            // note that the current values will be very weak
-
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
                         launcher.setLauncherVelocity(1100)

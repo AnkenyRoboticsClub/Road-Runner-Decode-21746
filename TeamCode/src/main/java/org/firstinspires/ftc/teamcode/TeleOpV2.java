@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import java.util.ArrayList;
 import java.util.List;
 
+@Disabled
 @TeleOp(name = "TeleOpV2", group = "TeleOp")
 public class TeleOpV2 extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
