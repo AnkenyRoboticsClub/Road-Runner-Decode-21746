@@ -163,7 +163,7 @@ public class TeleOpV3 extends LinearOpMode {
 
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(0.55)
+                        launcher.setLauncherVelocity(1100)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
@@ -173,12 +173,12 @@ public class TeleOpV3 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(0.625)
+                        launcher.setLauncherVelocity(1300)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(0.5 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) / 5)
+                        launcher.setLauncherVelocity(500 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) * 1000)
                 ));
             }
 
@@ -202,6 +202,12 @@ public class TeleOpV3 extends LinearOpMode {
             if (driver2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
                 driverControlled = true;
             }
+
+            double launcher1Velocity = launcher.launcher1.getVelocity();
+            double launcher2Velocity = launcher.launcher2.getVelocity();
+
+            telemetry.addData("launcher 1 velocity", launcher1Velocity);
+            telemetry.addData("launcher 2 velocity", launcher2Velocity);
 
             //More telemetry
             telemetry.addData("imu:", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));

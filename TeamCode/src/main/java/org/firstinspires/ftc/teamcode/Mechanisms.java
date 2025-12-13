@@ -21,9 +21,12 @@ public class Mechanisms {
         public DcMotorEx launcher1;
         public DcMotorEx launcher2;
 
+
         public Launcher(HardwareMap hardwareMap) {
             launcher1 = hardwareMap.get(DcMotorEx.class, "launcher1");
             launcher2 = hardwareMap.get(DcMotorEx.class, "launcher2");
+            launcher1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            launcher2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
 
         public class SetLauncherVelocity implements Action {
@@ -39,8 +42,9 @@ public class Mechanisms {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    launcher1.setPower(-velocity);
-                    launcher2.setPower(velocity);
+                    launcher1.setVelocity(-velocity);
+                    launcher2.setVelocity(velocity);
+
                     startingTime = System.currentTimeMillis();
                     initialized = true;
                 }
@@ -53,19 +57,42 @@ public class Mechanisms {
             return new Launcher.SetLauncherVelocity(velocity);
         }
 
+        public class SetLauncherPower implements Action {
+            private boolean initialized = false;
+            private long startingTime = System.currentTimeMillis();
+            private long timeElapsed = 0;
+            private double power;
+
+            public SetLauncherPower(double power) {
+                this.power = power;
+            }
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    launcher1.setPower(-power);
+                    launcher2.setPower(power);
+                    startingTime = System.currentTimeMillis();
+                    initialized = true;
+                }
+                timeElapsed = System.currentTimeMillis() - startingTime;
+                return timeElapsed < rampUpTime;
+            }
+        }
+
         // This is an old method which we kept in so we don't get errors from the old teleops
         // Do not use
         @Deprecated
         public Action setLauncherPower(double power) {
-            RobotLog.w("Warning: 'setLauncherPower' is a depreciated method. Use 'setLauncherVelocity'.");
-            return new SleepAction(0.0);
+            RobotLog.w("Warning: 'setLauncherPower' is a depreciated method. Use 'setLauncherVelocity' instead.");
+            return new Launcher.SetLauncherPower(power);
         }
     }
 
     public static class Gate {
         public Servo gate;
 
-        public static double openPosition = 0.3;
+        public static double openPosition = 0.5;
         public static double closePosition = 0.0;
 
         public Gate(HardwareMap hardwareMap) {
