@@ -120,12 +120,12 @@ public class Mechanisms {
 
         public Action cycleGate() {
             return new SequentialAction(
-                    setGatePosition(Gate.openPosition),
-                    new SleepAction(1.0),
+                    /*setGatePosition(Gate.openPosition),
+                    new SleepAction(2.0),*/
                     setGatePosition(Gate.closePosition),
-                    new SleepAction(1.0),
+                    new SleepAction(2.0),
                     setGatePosition(Gate.openPosition),
-                    new SleepAction(1.0)
+                    new SleepAction(2.0)
             );
         }
     }
