@@ -186,7 +186,7 @@ public class TeleOpV3 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
                 runningActions.add(new ParallelAction(
-                        gate.setGatePosition(Mechanisms.Gate.closePosition)
+                        gate.setGatePosition(Mechanisms.Gate.openPosition)
                 ));
             }
             // faces detected tag
