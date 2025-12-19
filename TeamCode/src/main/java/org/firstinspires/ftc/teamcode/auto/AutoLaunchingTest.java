@@ -18,7 +18,7 @@ public class AutoLaunchingTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-48, -48, Math.toRadians(52));
+        Pose2d initialPose = new Pose2d(-50, -50, Math.toRadians(235));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
@@ -30,20 +30,27 @@ public class AutoLaunchingTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                .lineToX(-30)
-                .turn(Math.toRadians(180))
+                //.strafeTo(new Vector2d(-15, -15))
+                .afterTime(0, launcher.setLauncherVelocity(1100))
+                .strafeToLinearHeading(new Vector2d(-10, -10), Math.toRadians(235))
                 .build();
 
-        Action exitLaunchZone = drive.actionBuilder(drive.localizer.getPose())
-                .strafeTo(new Vector2d(0, -20))
+        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-10, -10, 235))
+                //.strafeTo(new Vector2d(0, -20))
+                .strafeToLinearHeading(new Vector2d(20, -20), Math.toRadians(90+360))
                 .build();
 
         Action fullAuto = new SequentialAction(
-                launcher.setLauncherVelocity(1.0),
+                lineUp,
+                //new SleepAction(3.0),
+                //launcher.setLauncherVelocity(1000),
                 gate.setGatePosition(Gate.openPosition),
-                new SleepAction(1.0),
+                new SleepAction(2.0),
                 gate.setGatePosition(Gate.closePosition),
-                new SleepAction(1.0)
+                new SleepAction(2.0),
+                gate.setGatePosition(Gate.openPosition),
+                new SleepAction(2.0),
+                exitLaunchZone
         );
 
         Actions.runBlocking(fullAuto);

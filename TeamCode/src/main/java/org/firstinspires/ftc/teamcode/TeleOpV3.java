@@ -181,7 +181,7 @@ public class TeleOpV3 extends LinearOpMode {
 
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 runningActions.add(new ParallelAction(
-                        gate.setGatePosition(Mechanisms.Gate.openPosition)
+                        gate.cycleGate()
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
