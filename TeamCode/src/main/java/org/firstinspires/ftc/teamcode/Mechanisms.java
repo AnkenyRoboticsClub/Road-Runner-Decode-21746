@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -115,6 +116,17 @@ public class Mechanisms {
 
         public Action setGatePosition(double position) {
             return new SetGatePosition(position);
+        }
+
+        public Action cycleGate() {
+            return new SequentialAction(
+                    /*setGatePosition(Gate.openPosition),
+                    new SleepAction(2.0),*/
+                    setGatePosition(Gate.closePosition),
+                    new SleepAction(2),
+                    setGatePosition(Gate.openPosition),
+                    new SleepAction(2)
+            );
         }
     }
 

@@ -9,16 +9,16 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
 import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
-@Autonomous(name = "AutoLaunchingTest", group = "Autonomous")
-public class AutoLaunchingTest extends LinearOpMode {
+@Autonomous(name = "AutoBlueFrontV3", group = "Autonomous")
+public class AutoBlueFrontV3 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(-50, -50, Math.toRadians(235));
+        Pose2d initialPose = new Pose2d(-50, -50, Math.toRadians(225));
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
@@ -30,27 +30,25 @@ public class AutoLaunchingTest extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                //.strafeTo(new Vector2d(-15, -15))
-                .afterTime(0, launcher.setLauncherVelocity(1100))
-                .strafeToLinearHeading(new Vector2d(-10, -10), Math.toRadians(235))
+                .afterTime(0, launcher.setLauncherVelocity(1050))
+                .strafeToLinearHeading(new Vector2d(-20, -20), Math.toRadians(225))
                 .build();
 
-        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-10, -10, 235))
-                //.strafeTo(new Vector2d(0, -20))
-                .strafeToLinearHeading(new Vector2d(20, -20), Math.toRadians(90+360))
+        // would drive.localizer.getPose() work here instead of making our own pose?
+        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-20, -20, Math.toRadians(225)))
+                .afterTime(0,launcher.setLauncherVelocity(0))
+                .strafeToLinearHeading(new Vector2d(20, -40), Math.toRadians(90+360))
                 .build();
+
 
         Action fullAuto = new SequentialAction(
+                gate.setGatePosition(Gate.openPosition),
                 lineUp,
-                //new SleepAction(3.0),
-                //launcher.setLauncherVelocity(1000),
-                gate.setGatePosition(Gate.openPosition),
-                new SleepAction(2.0),
-                gate.setGatePosition(Gate.closePosition),
-                new SleepAction(2.0),
-                gate.setGatePosition(Gate.openPosition),
-                new SleepAction(2.0),
-                exitLaunchZone
+                gate.cycleGate(),
+                gate.cycleGate(),
+                gate.cycleGate(),
+                exitLaunchZone,
+                new SleepAction(2.0)
         );
 
         Actions.runBlocking(fullAuto);

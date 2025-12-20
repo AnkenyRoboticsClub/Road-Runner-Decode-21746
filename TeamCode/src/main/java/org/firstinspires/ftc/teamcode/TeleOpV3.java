@@ -160,7 +160,8 @@ public class TeleOpV3 extends LinearOpMode {
 
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(1100)
+                        launcher.setLauncherVelocity(1100),
+                        gate.cycleGate()
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
@@ -170,23 +171,25 @@ public class TeleOpV3 extends LinearOpMode {
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(1300)
+                        launcher.setLauncherVelocity(1300),
+                        gate.cycleGate()
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(500 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) * 1000)
+                        launcher.setLauncherVelocity(500 + driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) * 1000),
+                        gate.cycleGate()
                 ));
             }
 
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 runningActions.add(new ParallelAction(
-                        gate.setGatePosition(Mechanisms.Gate.openPosition)
+                        gate.cycleGate()
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
                 runningActions.add(new ParallelAction(
-                        gate.setGatePosition(Mechanisms.Gate.closePosition)
+                        gate.setGatePosition(Mechanisms.Gate.openPosition)
                 ));
             }
             // faces detected tag
