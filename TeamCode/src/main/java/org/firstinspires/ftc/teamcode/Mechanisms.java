@@ -123,9 +123,9 @@ public class Mechanisms {
                     /*setGatePosition(Gate.openPosition),
                     new SleepAction(2.0),*/
                     setGatePosition(Gate.closePosition),
-                    new SleepAction(2.0),
+                    new SleepAction(2),
                     setGatePosition(Gate.openPosition),
-                    new SleepAction(2.0)
+                    new SleepAction(2)
             );
         }
     }

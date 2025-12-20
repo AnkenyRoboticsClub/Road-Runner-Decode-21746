@@ -21,16 +21,17 @@ public class MeepMeepTesting {
 
         DriveShim drive = myBot.getDrive();
 
-        Pose2d initialPose = new Pose2d(-50, -50, Math.toRadians(225));
+        Pose2d initialPose = new Pose2d(-50, 50, Math.toRadians(135));
 
         Action lineUp = drive.actionBuilder(initialPose)
-                //.afterTime(0, launcher.setLauncherVelocity(1100))
-                .strafeToLinearHeading(new Vector2d(-10, -10), Math.toRadians(225))
+                // .afterTime(0, launcher.setLauncherVelocity(1050))
+                .strafeToLinearHeading(new Vector2d(-20, 20), Math.toRadians(135))
                 .build();
 
-        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(225)))
-                //.afterTime(0,launcher.setLauncherVelocity(0))
-                .strafeToLinearHeading(new Vector2d(20, -20), Math.toRadians(90+360))
+        // would drive.localizer.getPose() work here instead of making our own pose?
+        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-20, 20, Math.toRadians(135)))
+                // .afterTime(0,launcher.setLauncherVelocity(0))
+                .strafeToLinearHeading(new Vector2d(20, 40), Math.toRadians(-90-360))
                 .build();
 
 
@@ -40,12 +41,8 @@ public class MeepMeepTesting {
                 //gate.cycleGate(),
                 //gate.cycleGate(),
                 //gate.cycleGate(),
-                /*gate.setGatePosition(Gate.openPosition),
+                exitLaunchZone,
                 new SleepAction(2.0),
-                gate.setGatePosition(Gate.closePosition),
-                new SleepAction(2.0),
-                gate.setGatePosition(Gate.openPosition),
-                new SleepAction(2.0),*/
                 exitLaunchZone
         );
 

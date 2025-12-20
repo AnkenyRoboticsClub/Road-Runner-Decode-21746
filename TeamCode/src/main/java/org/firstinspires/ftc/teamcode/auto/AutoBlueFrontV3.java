@@ -7,15 +7,14 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
 import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-@Disabled
-@Autonomous(name = "DON'T USE - AutoBlueFrontV2", group = "Autonomous")
-public class AutoBlueFrontV2 extends LinearOpMode {
+
+@Autonomous(name = "AutoBlueFrontV3", group = "Autonomous")
+public class AutoBlueFrontV3 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -31,14 +30,14 @@ public class AutoBlueFrontV2 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                .afterTime(0, launcher.setLauncherVelocity(1100))
-                .strafeToLinearHeading(new Vector2d(-10, -10), Math.toRadians(225))
+                .afterTime(0, launcher.setLauncherVelocity(1050))
+                .strafeToLinearHeading(new Vector2d(-20, -20), Math.toRadians(225))
                 .build();
 
         // would drive.localizer.getPose() work here instead of making our own pose?
-        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-10, -10, Math.toRadians(225)))
+        Action exitLaunchZone = drive.actionBuilder(new Pose2d(-20, -20, Math.toRadians(225)))
                 .afterTime(0,launcher.setLauncherVelocity(0))
-                .strafeToLinearHeading(new Vector2d(20, -20), Math.toRadians(90+360))
+                .strafeToLinearHeading(new Vector2d(20, -40), Math.toRadians(90+360))
                 .build();
 
 
@@ -49,8 +48,7 @@ public class AutoBlueFrontV2 extends LinearOpMode {
                 gate.cycleGate(),
                 gate.cycleGate(),
                 exitLaunchZone,
-                new SleepAction(2.0),
-                exitLaunchZone
+                new SleepAction(2.0)
         );
 
         Actions.runBlocking(fullAuto);
