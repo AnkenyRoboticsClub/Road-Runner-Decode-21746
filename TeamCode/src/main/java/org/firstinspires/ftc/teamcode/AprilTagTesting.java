@@ -48,34 +48,40 @@ public class AprilTagTesting extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             // pass the current orientation from the imu to the camera
-            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            limelight.updateRobotOrientation(orientation.getYaw());
+            /*YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+            limelight.updateRobotOrientation(orientation.getYaw());*/
             // get the results from the camera
             LLResult result = limelight.getLatestResult();
 
             if (result != null && result.isValid()) {
 
                 // read the results
-                Pose3D robotPose = result.getBotpose_MT2();
+                //Pose3D robotPose = result.getBotpose_MT2();
+                Pose3D robotPose = result.getBotpose();
 
                 // turns the robot to face the tag
-                faceTag(Math.toRadians(result.getTx()));
+                //faceTag(Math.toRadians(result.getTx()));
 
-                double xInches = robotPose.getPosition().x * 39.3701; // convert from LL meters to RR inches
+                /*double xInches = robotPose.getPosition().x * 39.3701; // convert from LL meters to RR inches
                 double yInches = robotPose.getPosition().y * 39.3701; // convert from LL meters to RR inches
                 double headingRadians = Math.toRadians(robotPose.getOrientation().getYaw()); // convert from LL degrees to RR radians
-                drive.localizer.setPose(new Pose2d(xInches, yInches, headingRadians)); // sets the RR pose to pose from LL
+                drive.localizer.setPose(new Pose2d(xInches, yInches, headingRadians)); // sets the RR pose to pose from LL*/
 
-                double distance = getDistanceFromTag(result.getTa());
+                //double distance = getDistanceFromTag(result.getTa());
 
                 // print out data from results
                 telemetry.addData("target x", result.getTx());
                 telemetry.addData("target y", result.getTy());
-                telemetry.addData("target area", result.getTa());
-                telemetry.addData("distance", distance);
+                telemetry.addData("distance", result.getBotposeAvgDist());
+                //telemetry.addData("target area", result.getTa());
+                //telemetry.addData("distance", distance);
+                telemetry.addData("robot yaw", robotPose.getOrientation().getYaw());
+                telemetry.addData("robot x", robotPose.getPosition().x);
+                telemetry.addData("robot y", robotPose.getPosition().y);
+                telemetry.addData("robot z", robotPose.getPosition().z);
 
-                telemetry.addData("robot heading", robotPose.getOrientation().getYaw());
-                telemetry.addData("robot position", robotPose.getPosition());
+                //telemetry.addData("robot heading", robotPose.getOrientation().getYaw());
+                //telemetry.addData("robot position", robotPose.getPosition());
 
             }
 
