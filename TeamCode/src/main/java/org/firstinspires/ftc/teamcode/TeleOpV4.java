@@ -152,7 +152,7 @@ public class TeleOpV4 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;
 
-                    if(!(tagX==1000)) {
+                    if(!(tagX==1000)&&Math.abs(difference)<30) {
                         rx=tagX/-40;
                     } else {
                         rx = (difference / 45) * -1;
