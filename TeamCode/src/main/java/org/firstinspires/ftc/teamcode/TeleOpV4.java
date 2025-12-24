@@ -32,6 +32,7 @@ public class TeleOpV4 extends LinearOpMode {
     public MecanumDrive drive;
     boolean driverControlled = true;
     boolean targetLock = false;
+    boolean team = false; //false = red true = blue
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -46,7 +47,7 @@ public class TeleOpV4 extends LinearOpMode {
         // change the pipeline to what you set on "limelight.local:5801"
         // you can change the pipeline while the camera is running to detect different types of tags (motif vs. localization)
         limelight.pipelineSwitch(0);
-        limelight.setPollRateHz(50); // This sets how often we ask Limelight for data (# times per second)
+        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (# times per second)
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(
@@ -81,28 +82,29 @@ public class TeleOpV4 extends LinearOpMode {
 
             //Read camera data
             LLResult result = limelight.getLatestResult();
-            double cameraXInches;
-            double cameraYInches;
-            double cameraHeadingRadians;
-            double cameraDistance;
             double tagX = 1000;
             if (result != null && result.isValid()) {
                 tagX = result.getTx();
 
                 Pose3D robotPose = result.getBotpose();
+                double cameraXInches;
+                double cameraYInches;
+                double cameraHeadingRadians;
+                double cameraDistance;
                 cameraXInches = robotPose.getPosition().x * 39.3701; // convert from LL meters to RR inches
                 cameraYInches = robotPose.getPosition().y * 39.3701; // convert from LL meters to RR inches
                 cameraHeadingRadians = Math.toRadians(robotPose.getOrientation().getYaw()); // convert from LL degrees to RR radians
-                //drive.localizer.setPose(new Pose2d(xInches, yInches, headingRadians)); // sets the RR pose to pose from LL
+                drive.localizer.setPose(new Pose2d(cameraXInches, cameraYInches, cameraHeadingRadians)); // sets the RR pose to pose from LL
+                cameraDistance = result.getBotposeAvgDist();
 
                 // print out data from results
                 telemetry.addData("target x", result.getTx());
                 telemetry.addData("target y", result.getTy());
                 telemetry.addData("distance", result.getBotposeAvgDist());
-                telemetry.addData("robot yaw", robotPose.getOrientation().getYaw());
-                telemetry.addData("robot x", robotPose.getPosition().x);
-                telemetry.addData("robot y", robotPose.getPosition().y);
-                telemetry.addData("robot z", robotPose.getPosition().z);
+                telemetry.addData("camera yaw", robotPose.getOrientation().getYaw());
+                telemetry.addData("camera x", robotPose.getPosition().x);
+                telemetry.addData("camera y", robotPose.getPosition().y);
+                telemetry.addData("camera z", robotPose.getPosition().z);
             }
 
             driver1.readButtons();
@@ -135,16 +137,36 @@ public class TeleOpV4 extends LinearOpMode {
                 double rx;
 
                 if(targetLock) {
-                    if(tagX==1000){
-                        rx=0;
+                    double goalX = -70;
+                    double goalY;
+                    if(team){
+                        goalY=-70;
                     } else {
-                        rx = tagX / -50;
-                        if (rx > 0.5) {
-                            rx = 0.5;
-                        }
-                        if (rx < -0.5) {
-                            rx = -0.5;
-                        }
+                        goalY=70;
+                    }
+                    double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
+                    double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
+                    goalAngle+=360;
+                    goalAngle%=360;
+                    currentAngle+=360;
+                    currentAngle%=360;
+                    double difference = ((goalAngle-currentAngle+540)%360)-180;
+
+                    if(!(tagX==1000)) {
+                        rx=tagX/-40;
+                    } else {
+                        rx = (difference / 45) * -1;
+                    }
+
+                    if (rx<0.1&&rx>-0.1){
+                        rx=0.1*(rx/Math.abs(rx));
+                    }
+
+                    if (rx > 1) {
+                        rx = 1;
+                    }
+                    if (rx < -1) {
+                        rx = -1;
                     }
                 } else {
                     rx = gamepad1.right_stick_x * rMult;
@@ -216,10 +238,13 @@ public class TeleOpV4 extends LinearOpMode {
             }
 
             if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-                targetLock = true;
+                team = true;//blue
             }
-            if (driver2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-                targetLock = false;
+            if (driver2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+                team = false;//red
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.RIGHT_STICK_BUTTON)) {
+                targetLock = !targetLock;
             }
 
             double launcher1Velocity = launcher.launcher1.getVelocity();
@@ -228,8 +253,10 @@ public class TeleOpV4 extends LinearOpMode {
             telemetry.addData("launcher 1 velocity", launcher1Velocity);
             telemetry.addData("launcher 2 velocity", launcher2Velocity);
 
-            //More telemetry
             telemetry.addData("imu:", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("pose X", drive.localizer.getPose().position.x);
+            telemetry.addData("pose Y", drive.localizer.getPose().position.y);
+            telemetry.addData("pose heading", Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
             telemetry.update();
         }
     }
