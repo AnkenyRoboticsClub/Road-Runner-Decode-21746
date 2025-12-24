@@ -155,11 +155,11 @@ public class TeleOpV4 extends LinearOpMode {
                     if(!(tagX==1000)&&Math.abs(difference)<30) {
                         rx=tagX/-40;
                     } else {
-                        rx = (difference / 45) * -1;
+                        rx = (difference / 55) * -1;
                     }
 
-                    if (rx<0.1&&rx>-0.1){
-                        rx=0.1*(rx/Math.abs(rx));
+                    if (rx<0.05&&rx>-0.05){
+                        rx=0.05*(rx/Math.abs(rx));
                     }
 
                     if (rx > 1) {
