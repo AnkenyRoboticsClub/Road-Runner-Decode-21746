@@ -24,7 +24,7 @@ public class MeepMeepTesting {
         Pose2d initialPose = new Pose2d(60, -20, Math.toRadians(180));
 
         Action lineUp = drive.actionBuilder(initialPose)
-                //.afterTime(0, launcher.setLauncherVelocity(1050))
+                //.afterTime(0, launcher.setLauncherVelocity(1300))
                 .strafeToLinearHeading(new Vector2d(55, -20), Math.toRadians(200))
                 .build();
 
@@ -38,9 +38,9 @@ public class MeepMeepTesting {
         Action fullAuto = new SequentialAction(
                 //gate.setGatePosition(Gate.openPosition),
                 lineUp,
-//                gate.cycleGate(),
-//                gate.cycleGate(),
-//                gate.cycleGate(),
+                //gate.cycleGate(),
+                //gate.cycleGate(),
+                //gate.cycleGate(),
                 exitLaunchZone,
                 new SleepAction(2.0)
         );
