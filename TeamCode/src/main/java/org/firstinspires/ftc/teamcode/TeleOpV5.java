@@ -34,12 +34,14 @@ public class TeleOpV5 extends LinearOpMode {
     boolean launcherAutoVelocity = false;
 
     double[][] launchSpeedLookup2DArray = {
+            //distance, velocity (tps)
             {0, 1000},
-            {Math.hypot(70-35,70-35), 1000},
-            {Math.hypot(70,70), 1100},
-            {Math.hypot(70+60,70+15), 1300},
-            {Math.hypot(70+70,70+70), 1500},
-            {300, 1500}
+            {15, 1000},
+            {67, 1060},
+            {83, 1200},
+            {99, 1260},
+            {120, 1300},
+            {150, 1500}
     };
 
     @Override
@@ -165,6 +167,7 @@ public class TeleOpV5 extends LinearOpMode {
 
                     if(!(tagX==1000)&&Math.abs(difference)<30) {
                         rx=tagX/-40;
+                        //rx = (difference / 55) * -1;
                     } else {
                         rx = (difference / 55) * -1;
                     }
