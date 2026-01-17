@@ -41,8 +41,8 @@ public class TeleOpV5 extends LinearOpMode {
             {67, 1060},
             {83, 1190},//usually 1200
             {99, 1250},
-            {120, 1300},
-            {150, 1500}
+            {130, 1300},
+            {100000000, 1300}
     };
 
     @Override
@@ -167,10 +167,10 @@ public class TeleOpV5 extends LinearOpMode {
                     double difference = ((goalAngle-currentAngle+540)%360)-180;
 
                     if(!(tagX==1000)&&Math.abs(difference)<30) {
-                        if(distanceToTarget<80){
+                        if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
-                            rx=(tagX-7)/-40;
+                            rx=(tagX-5)/-40;
                         }
                         //rx=tagX-40;
                         //rx = (difference / 55) * -1;

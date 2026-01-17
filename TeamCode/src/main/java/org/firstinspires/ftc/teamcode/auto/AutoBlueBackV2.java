@@ -30,12 +30,12 @@ public class AutoBlueBackV2 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                .afterTime(0, launcher.setLauncherVelocity(1300))
-                .strafeToLinearHeading(new Vector2d(55, -20), Math.toRadians(200))
+                .afterTime(0, launcher.setLauncherVelocity(1240))
+                .strafeToLinearHeading(new Vector2d(55, -20), Math.toRadians(201))
                 .build();
 
         // would drive.localizer.getPose() work here instead of making our own pose?
-        Action exitLaunchZone = drive.actionBuilder(new Pose2d(55, -20, Math.toRadians(200)))
+        Action exitLaunchZone = drive.actionBuilder(new Pose2d(55, -20, Math.toRadians(201)))
                 .afterTime(0,launcher.setLauncherVelocity(0))
                 .strafeToLinearHeading(new Vector2d(30, -30), Math.toRadians(90+360))
                 .build();
