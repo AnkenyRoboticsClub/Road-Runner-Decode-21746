@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.internal.usb.EthernetOverUsbSerialNumber;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class TeleOpV5 extends LinearOpMode {
             {0, 1000},
             {15, 1000},
             {67, 1060},
-            {83, 1200},
-            {99, 1260},
+            {83, 1190},//usually 1200
+            {99, 1250},
             {120, 1300},
             {150, 1500}
     };
@@ -57,7 +58,7 @@ public class TeleOpV5 extends LinearOpMode {
         // change the pipeline to what you set on "limelight.local:5801"
         // you can change the pipeline while the camera is running to detect different types of tags (motif vs. localization)
         limelight.pipelineSwitch(0);
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (# times per second)
+        limelight.setPollRateHz(50); //100 // This sets how often we ask Limelight for data (# times per second)
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(
@@ -166,10 +167,17 @@ public class TeleOpV5 extends LinearOpMode {
                     double difference = ((goalAngle-currentAngle+540)%360)-180;
 
                     if(!(tagX==1000)&&Math.abs(difference)<30) {
-                        rx=tagX/-40;
+                        if(distanceToTarget<80){
+                            rx=(tagX-2)/-40;
+                        } else {
+                            rx=(tagX-7)/-40;
+                        }
+                        //rx=tagX-40;
                         //rx = (difference / 55) * -1;
-                    } else {
+                    } else if (tagX==1000&&!(Math.abs(difference)<30)) {
                         rx = (difference / 55) * -1;
+                    } else {
+                        rx = (difference / 90) * -1;
                     }
 
                     if (rx<0.05&&rx>-0.05){
