@@ -24,14 +24,14 @@ public class MeepMeepTesting {
         Pose2d initialPose = new Pose2d(-50, 50, Math.toRadians(135));
 
         Action lineUp = drive.actionBuilder(initialPose)
-                // .afterTime(0, launcher.setLauncherVelocity(1050))
+                //.afterTime(0, launcher.setLauncherVelocity(1050))
                 .strafeToLinearHeading(new Vector2d(-20, 20), Math.toRadians(135))
                 .build();
 
         // would drive.localizer.getPose() work here instead of making our own pose?
         Action exitLaunchZone = drive.actionBuilder(new Pose2d(-20, 20, Math.toRadians(135)))
-                // .afterTime(0,launcher.setLauncherVelocity(0))
-                .strafeToLinearHeading(new Vector2d(20, 40), Math.toRadians(-90-360))
+                //.afterTime(0,launcher.setLauncherVelocity(0))
+                .strafeToLinearHeading(new Vector2d(20, 40), Math.toRadians(90))
                 .build();
 
 
@@ -42,8 +42,7 @@ public class MeepMeepTesting {
                 //gate.cycleGate(),
                 //gate.cycleGate(),
                 exitLaunchZone,
-                new SleepAction(2.0),
-                exitLaunchZone
+                new SleepAction(2.0)
         );
 
         myBot.runAction(fullAuto);

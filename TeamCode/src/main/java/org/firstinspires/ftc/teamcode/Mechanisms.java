@@ -93,8 +93,8 @@ public class Mechanisms {
     public static class Gate {
         public Servo gate;
 
-        public static double openPosition = 0.5;
-        public static double closePosition = 0.0;
+        public static double openPosition = 1;
+        public static double closePosition = 0;
 
         public Gate(HardwareMap hardwareMap) {
             gate = hardwareMap.get(Servo.class, "gate");
