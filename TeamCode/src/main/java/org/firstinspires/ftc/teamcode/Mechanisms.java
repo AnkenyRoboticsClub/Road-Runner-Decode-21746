@@ -37,8 +37,8 @@ public class Mechanisms {
             private double velocity;
 
             public SetLauncherVelocity(double velocity) {
-                this.velocity = velocity;
-            }
+                this.velocity = velocity*1;
+            } //1 can be changed to whatever the gear ratio is
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
