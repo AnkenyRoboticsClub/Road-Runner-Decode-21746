@@ -173,9 +173,9 @@ public class TeleOpV6 extends LinearOpMode {
                         }*/
                         if(distanceToTarget>80){
                             if(team) {
-                                rx = (tagX + 2) / -40.0;
-                            } else {
                                 rx = (tagX - 2) / -40.0;
+                            } else {
+                                rx = (tagX + 2) / -40.0;
                             }
                         } else {
                             rx=tagX/-40.0;
@@ -280,6 +280,16 @@ public class TeleOpV6 extends LinearOpMode {
                             gate.cycleGate()
                     ));
                 }
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+                runningActions.add(new ParallelAction(
+                        gate.setGatePosition(1)
+                ));
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
+                runningActions.add(new ParallelAction(
+                        gate.setGatePosition(0.7)
+                ));
             }
             /*if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 runningActions.add(new ParallelAction(
