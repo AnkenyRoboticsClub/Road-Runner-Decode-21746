@@ -40,7 +40,7 @@ public class TeleOpV6 extends LinearOpMode {
             {67, 1060},
             {83, 1190},//usually 1200
             {95, 1250},
-            {110, 1280},
+            {110, 1300},//1280
             {100000000, 1325}
     };
 
@@ -173,9 +173,9 @@ public class TeleOpV6 extends LinearOpMode {
                         }*/
                         if(distanceToTarget>80){
                             if(team) {
-                                rx = (tagX - 2) / -40.0;
-                            } else {
                                 rx = (tagX + 2) / -40.0;
+                            } else {
+                                rx = (tagX - 2) / -40.0;
                             }
                         } else {
                             rx=tagX/-40.0;
@@ -290,6 +290,14 @@ public class TeleOpV6 extends LinearOpMode {
                 runningActions.add(new ParallelAction(
                         gate.setGatePosition(0.7)
                 ));
+            }
+            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
+                launcherAutoVelocity = false;
+                if(launcher.launcher2.getVelocity()>500) {
+                    runningActions.add(new ParallelAction(
+                            gate.emptyGate(launcher)
+                    ));
+                }
             }
             /*if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 runningActions.add(new ParallelAction(

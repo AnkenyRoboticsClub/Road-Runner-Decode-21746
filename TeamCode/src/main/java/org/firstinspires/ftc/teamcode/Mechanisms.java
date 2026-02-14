@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 public class Mechanisms {
 
     public static class Launcher {
-        private final int rampUpTime = 1000;
+        private final int rampUpTime = 0;//1000
 
         public DcMotorEx launcher1;
         public DcMotorEx launcher2;
@@ -126,6 +126,20 @@ public class Mechanisms {
                     new SleepAction(2),
                     setGatePosition(Gate.openPosition),
                     new SleepAction(2)
+            );
+        }
+
+        public Action emptyGate(Launcher launcher) {
+            return new SequentialAction(
+                    setGatePosition(0.7),
+                    new SleepAction(1.3),//0.6
+                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-100),//100
+                    new SleepAction(0.6),//0.05
+                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-100),//100
+                    new SleepAction(0.6),//0.5
+                    launcher.setLauncherVelocity(0),
+                    setGatePosition(1)
+
             );
         }
     }
