@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 import java.util.ArrayList;
 import java.util.List;
 
-@TeleOp(name = "TeleOpV6", group = "TeleOp")
-public class TeleOpV6 extends LinearOpMode {
+@TeleOp(name = "TeleOpV7", group = "TeleOp")
+public class TeleOpV7 extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
     public Limelight3A limelight;
     public IMU imu;
@@ -156,7 +156,7 @@ public class TeleOpV6 extends LinearOpMode {
                 double x = gamepad1.left_stick_x * yMult;
                 double rx = 0;
 
-                if(targetLock&&distanceToTarget<105) {
+                if(targetLock) {
                     double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
                     goalAngle+=360;
@@ -173,9 +173,9 @@ public class TeleOpV6 extends LinearOpMode {
                         }*/
                         if(distanceToTarget>80){
                             if(team) {
-                                rx = (tagX -1) / -40.0;
+                                rx = (tagX + 4) / -40.0;
                             } else {
-                                rx = (tagX + 1) / -40.0;
+                                rx = (tagX - 4) / -40.0;
                             }
                         } else {
                             rx=tagX/-40.0;

@@ -94,7 +94,7 @@ public class Mechanisms {
         public Servo gate;
 
         public static double openPosition = 1;
-        public static double closePosition = 0;
+        public static double closePosition = 0.3;
 
         public Gate(HardwareMap hardwareMap) {
             gate = hardwareMap.get(Servo.class, "gate");
@@ -123,20 +123,39 @@ public class Mechanisms {
                     /*setGatePosition(Gate.openPosition),
                     new SleepAction(2.0),*/
                     setGatePosition(Gate.closePosition),
-                    new SleepAction(2),
+                    new SleepAction(1),
                     setGatePosition(Gate.openPosition),
-                    new SleepAction(2)
+                    new SleepAction(1)
+            );
+        }
+
+        public Action threeGate() {
+            return new SequentialAction(
+                    setGatePosition(Gate.closePosition),
+                    new SleepAction(1.8),
+                    setGatePosition(Gate.openPosition),
+                    new SleepAction(0.4),
+                    setGatePosition(Gate.closePosition),
+                    new SleepAction(1.5),
+                    setGatePosition(Gate.openPosition),
+                    new SleepAction(0.4),
+                    setGatePosition(Gate.closePosition),
+                    new SleepAction(1.5),
+                    setGatePosition(Gate.openPosition),
+                    new SleepAction(0.3)
             );
         }
 
         public Action emptyGate(Launcher launcher) {
             return new SequentialAction(
                     setGatePosition(0.7),
-                    new SleepAction(1.3),//0.6
-                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-100),//100
-                    new SleepAction(0.6),//0.05
-                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-100),//100
-                    new SleepAction(0.6),//0.5
+                    new SleepAction(0.25),
+                    new SleepAction(0.52),//0.6
+                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-20),//100
+                    new SleepAction(0.40),//0.05
+                    launcher.setLauncherVelocity(launcher.launcher2.getVelocity()-25),//100
+                    new SleepAction(0.52),//0.5
+                    new SleepAction(0.25),
                     launcher.setLauncherVelocity(0),
                     setGatePosition(1)
 
