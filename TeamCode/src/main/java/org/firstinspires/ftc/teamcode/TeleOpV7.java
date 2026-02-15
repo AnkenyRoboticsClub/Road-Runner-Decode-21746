@@ -166,7 +166,7 @@ public class TeleOpV7 extends LinearOpMode {
                 double x = gamepad1.left_stick_x * yMult;
                 double rx = 0;
 
-                if(targetLock&&distanceToLoadingZone<25) {
+                if(targetLock&&distanceToLoadingZone>25) {
                     double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
                     goalAngle+=360;
@@ -276,8 +276,13 @@ public class TeleOpV7 extends LinearOpMode {
             }*/
 
             if(launcherAutoVelocity){
-                launcher.launcher1.setVelocity(-velocity);
-                launcher.launcher2.setVelocity(velocity);
+                if(distanceToLoadingZone>25) {
+                    launcher.launcher1.setVelocity(-velocity);
+                    launcher.launcher2.setVelocity(velocity);
+                } else {
+                    launcher.launcher1.setVelocity(0);
+                    launcher.launcher2.setVelocity(0);
+                }
             } else {
                 /*launcher.launcher1.setVelocity(0);
                 launcher.launcher2.setVelocity(0);*/
@@ -294,7 +299,7 @@ public class TeleOpV7 extends LinearOpMode {
                     ));
                 }
             }
-            if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
+            /*if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
                 runningActions.add(new ParallelAction(
                         gate.setGatePosition(1)
                 ));
@@ -311,7 +316,7 @@ public class TeleOpV7 extends LinearOpMode {
                             gate.emptyGate(launcher)
                     ));
                 }
-            }
+            }*/
             /*if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
                 runningActions.add(new ParallelAction(
                         gate.setGatePosition(Mechanisms.Gate.openPosition)
