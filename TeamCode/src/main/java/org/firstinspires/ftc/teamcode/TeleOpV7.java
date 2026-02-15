@@ -41,6 +41,7 @@ public class TeleOpV7 extends LinearOpMode {
             {83, 1190},//usually 1200
             {95, 1250},
             {105, 1300},//1280
+            {110, 1325},
             {100000000, 1325}
     };
 
@@ -141,7 +142,16 @@ public class TeleOpV7 extends LinearOpMode {
                 goalY=70;
             }
 
+            double loadingZoneX = 70;
+            double loadingZoneY;
+            if(team){
+                loadingZoneY=70;
+            } else {
+                loadingZoneY=-70;
+            }
+
             double distanceToTarget = Math.hypot(goalX-drive.localizer.getPose().position.x, goalY-drive.localizer.getPose().position.y);
+            double distanceToLoadingZone = Math.hypot(loadingZoneX-drive.localizer.getPose().position.x, loadingZoneY-drive.localizer.getPose().position.y);
 
             if (driverControlled) {
                 double xMult = 0.5;
@@ -156,7 +166,7 @@ public class TeleOpV7 extends LinearOpMode {
                 double x = gamepad1.left_stick_x * yMult;
                 double rx = 0;
 
-                if(targetLock) {
+                if(targetLock&&distanceToLoadingZone<25) {
                     double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
                     goalAngle+=360;
@@ -165,13 +175,13 @@ public class TeleOpV7 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;
 
-                    if(!(tagX==1000)&&Math.abs(difference)<30) {
+                    if(!(tagX==1000)&&Math.abs(difference)<30&&distanceToTarget<90) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
                             rx=(tagX-5)/-40;
                         }*/
-                        if(distanceToTarget>80){
+                        /*if(distanceToTarget>80){
                             if(team) {
                                 rx = (tagX + 4) / -40.0;
                             } else {
@@ -179,17 +189,19 @@ public class TeleOpV7 extends LinearOpMode {
                             }
                         } else {
                             rx=tagX/-40.0;
-                        }
-                        //rx=tagX/-40.0;
+                        }*/
+                        rx=tagX/-40.0;
                         //rx = (difference / 55) * -1;
-                    } else if (tagX==1000&&!(Math.abs(difference)<30)) {
+                    } else if (Math.abs(difference)>30) {
                         rx = (difference / 55) * -1;
                     } else {
                         rx = (difference / 90) * -1;
                     }
 
-                    if (rx<0.05&&rx>-0.05){
+                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<5){
                         rx=0.05*(rx/Math.abs(rx));
+                    } else if (rx<0.1&&rx>-0.1){
+                        rx=0.1*(rx/Math.abs(rx));
                     }
 
                     if (rx > 1) {
