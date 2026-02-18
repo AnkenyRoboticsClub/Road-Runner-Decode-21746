@@ -33,6 +33,7 @@ public class TeleOpV7 extends LinearOpMode {
     boolean team = false; //false = red true = blue
     boolean launcherAutoVelocity = false;
 
+    //distances might all be wrong after update
     double[][] launchSpeedLookup2DArray = {
             //distance, velocity (tps)
             {0, 1000},
@@ -48,7 +49,7 @@ public class TeleOpV7 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
+        drive = new MecanumDrive(hardwareMap, PoseStorage.currentPose);
         drive.leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         drive.leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         drive.rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -94,7 +95,7 @@ public class TeleOpV7 extends LinearOpMode {
             //Read camera data
             LLResult result = limelight.getLatestResult();
             double tagX = 10000;
-            double tagDistance = 0;
+            //double tagDistance = 0;
             if (result != null && result.isValid()) {
                 tagX = result.getTx();
                 Pose3D robotPose = result.getBotpose();
@@ -105,17 +106,22 @@ public class TeleOpV7 extends LinearOpMode {
                 cameraXInches = robotPose.getPosition().x * 39.3701; // convert from LL meters to RR inches
                 cameraYInches = robotPose.getPosition().y * 39.3701; // convert from LL meters to RR inches
                 cameraHeadingRadians = Math.toRadians(robotPose.getOrientation().getYaw()); // convert from LL degrees to RR radians
-                drive.localizer.setPose(new Pose2d(cameraXInches, cameraYInches, cameraHeadingRadians)); // sets the RR pose to pose from LL
                 cameraDistance = result.getBotposeAvgDist();
+                if(cameraDistance<(20.0/39.3701)){//idk if this is right but im guessing the dist will be in meters idk
+                    drive.localizer.setPose(new Pose2d(cameraXInches, cameraYInches, cameraHeadingRadians)); // sets the RR pose to pose from LL
+                } else {
+                    drive.localizer.setPose(new Pose2d(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, cameraHeadingRadians)); // should just change the heading
+                }
 
                 // print out data from results
                 telemetry.addData("target x", result.getTx());
                 telemetry.addData("target y", result.getTy());
-                telemetry.addData("distance", result.getBotposeAvgDist());
+                //telemetry.addData("distance", result.getBotposeAvgDist());
                 telemetry.addData("camera yaw", robotPose.getOrientation().getYaw());
                 telemetry.addData("camera x", robotPose.getPosition().x);
                 telemetry.addData("camera y", robotPose.getPosition().y);
                 telemetry.addData("camera z", robotPose.getPosition().z);
+                telemetry.addData("BotposeAvgDist", cameraDistance);
             }
 
             driver1.readButtons();
@@ -352,14 +358,24 @@ public class TeleOpV7 extends LinearOpMode {
                 ));
             }*/
 
-            if (driver2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+            if (driver1.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
                 team = true;//blue
             }
-            if (driver2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+            if (driver1.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
                 team = false;//red
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.RIGHT_STICK_BUTTON)) {
                 targetLock = !targetLock;
+            }
+
+            if (driver1.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
+                loadingZoneX-=9;
+                if(team){
+                    loadingZoneY-=9;
+                } else {
+                    loadingZoneY+=9;
+                }
+                drive.localizer.setPose(new Pose2d(loadingZoneX,loadingZoneY, drive.localizer.getPose().heading.toDouble()));
             }
 
             /*double launcher1Velocity = launcher.launcher1.getVelocity();
