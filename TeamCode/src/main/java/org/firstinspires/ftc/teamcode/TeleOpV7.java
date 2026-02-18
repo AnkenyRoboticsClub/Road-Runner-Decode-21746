@@ -39,10 +39,10 @@ public class TeleOpV7 extends LinearOpMode {
             {15, 1000},
             {67, 1060},
             {83, 1190},//usually 1200
-            {95, 1250},
-            {105, 1300},//1280
-            {110, 1325},
-            {100000000, 1325}
+            {90, 1275},
+            {100, 1315},//1280
+            {110, 1335},
+            {100000000, 1335}
     };
 
     @Override
@@ -93,10 +93,10 @@ public class TeleOpV7 extends LinearOpMode {
 
             //Read camera data
             LLResult result = limelight.getLatestResult();
-            double tagX = 1000;
+            double tagX = 10000;
+            double tagDistance = 0;
             if (result != null && result.isValid()) {
                 tagX = result.getTx();
-
                 Pose3D robotPose = result.getBotpose();
                 double cameraXInches;
                 double cameraYInches;
@@ -166,16 +166,44 @@ public class TeleOpV7 extends LinearOpMode {
                 double x = gamepad1.left_stick_x * yMult;
                 double rx = 0;
 
+                double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
+                if (team&&distanceToTarget>80) {
+                    goalAngle-=3;
+                } else {
+                    goalAngle+=3;
+                }
+                double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
+                goalAngle+=360;
+                goalAngle%=360;
+                currentAngle+=360;
+                currentAngle%=360;
+                double difference = ((goalAngle-currentAngle+540)%360)-180;
+
+                if(targetLock) {
+                    if (Math.abs(difference) < 20) {
+                        limelight.setPollRateHz(25);
+                    } else {
+                        limelight.setPollRateHz(50);
+                    }
+                } else {
+                    limelight.setPollRateHz(15);
+                }
+
                 if(targetLock&&distanceToLoadingZone>25) {
-                    double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
+                    /*double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
+                    if (team&&distanceToTarget>80) {
+                        goalAngle-=3;
+                    } else {
+                        goalAngle+=3;
+                    }
                     double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
                     goalAngle+=360;
                     goalAngle%=360;
                     currentAngle+=360;
                     currentAngle%=360;
-                    double difference = ((goalAngle-currentAngle+540)%360)-180;
+                    double difference = ((goalAngle-currentAngle+540)%360)-180;*/
 
-                    if(!(tagX==1000)&&Math.abs(difference)<30&&distanceToTarget<90) {
+                    if(!(tagX==10000)&&Math.abs(difference)<30&&distanceToTarget<80) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
@@ -198,7 +226,7 @@ public class TeleOpV7 extends LinearOpMode {
                         rx = (difference / 90) * -1;
                     }
 
-                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<5){
+                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<10){
                         rx=0.05*(rx/Math.abs(rx));
                     } else if (rx<0.1&&rx>-0.1){
                         rx=0.1*(rx/Math.abs(rx));
@@ -244,7 +272,7 @@ public class TeleOpV7 extends LinearOpMode {
                 rightBack.setPower(backRightPower);
             }
 
-            double velocity = interpolate(launchSpeedLookup2DArray, distanceToTarget)+95;
+            double velocity = interpolate(launchSpeedLookup2DArray, distanceToTarget);//+95
 
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 launcherAutoVelocity = false;
@@ -289,6 +317,7 @@ public class TeleOpV7 extends LinearOpMode {
             }
 
             telemetry.addData("distanceToTarget", distanceToTarget);
+            telemetry.addData("distanceToLoadingZone", distanceToLoadingZone);
             telemetry.addData("autoLaunchSpeed", velocity);
 
             if (driver2.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
