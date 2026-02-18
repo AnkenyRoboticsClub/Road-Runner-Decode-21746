@@ -113,6 +113,13 @@ public class TeleOpV7 extends LinearOpMode {
                     drive.localizer.setPose(new Pose2d(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, cameraHeadingRadians)); // should just change the heading
                 }
 
+                //print MT2 stuff maybe
+                Pose3D robotPoseMT2 = result.getBotpose_MT2();
+                limelight.updateRobotOrientation(robotPose.getOrientation().getYaw());
+                telemetry.addData("camera x", robotPoseMT2.getPosition().x);
+                telemetry.addData("camera y", robotPoseMT2.getPosition().y);
+                telemetry.addData("camera z", robotPoseMT2.getPosition().z);
+
                 // print out data from results
                 telemetry.addData("target x", result.getTx());
                 telemetry.addData("target y", result.getTy());
