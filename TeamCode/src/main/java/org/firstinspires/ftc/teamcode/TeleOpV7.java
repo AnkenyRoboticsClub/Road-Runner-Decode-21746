@@ -37,12 +37,12 @@ public class TeleOpV7 extends LinearOpMode {
     double[][] launchSpeedLookup2DArray = {
             //distance, velocity (tps)
             {0, 1000},
-            {15, 1000},
-            {67, 1060},
-            {83, 1190},//usually 1200
-            {90, 1275},
-            {100, 1315},//1280
-            {110, 1335},
+            {45, 1000},
+            {100, 1060},
+            {120, 1190},//usually 1200
+            {135, 1290},
+            {150, 1315},//1280
+            {160, 1335},
             {100000000, 1335}
     };
 
@@ -103,32 +103,42 @@ public class TeleOpV7 extends LinearOpMode {
                 double cameraYInches;
                 double cameraHeadingRadians;
                 double cameraDistance;
+                double cameraDistanceInches;
                 cameraXInches = robotPose.getPosition().x * 39.3701; // convert from LL meters to RR inches
                 cameraYInches = robotPose.getPosition().y * 39.3701; // convert from LL meters to RR inches
                 cameraHeadingRadians = Math.toRadians(robotPose.getOrientation().getYaw()); // convert from LL degrees to RR radians
                 cameraDistance = result.getBotposeAvgDist();
-                if(cameraDistance<(20.0/39.3701)){//idk if this is right but im guessing the dist will be in meters idk
+                cameraDistanceInches = cameraDistance * 39.3701;
+                /*if(cameraDistance<(20.0/39.3701)){//idk if this is right but im guessing the dist will be in meters idk
                     drive.localizer.setPose(new Pose2d(cameraXInches, cameraYInches, cameraHeadingRadians)); // sets the RR pose to pose from LL
                 } else {
                     drive.localizer.setPose(new Pose2d(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, cameraHeadingRadians)); // should just change the heading
-                }
+                }*/
+                drive.localizer.setPose(new Pose2d(drive.localizer.getPose().position.x, drive.localizer.getPose().position.y, cameraHeadingRadians));
 
                 //print MT2 stuff maybe
-                Pose3D robotPoseMT2 = result.getBotpose_MT2();
+                /*Pose3D robotPoseMT2 = result.getBotpose_MT2();
                 limelight.updateRobotOrientation(robotPose.getOrientation().getYaw());
-                telemetry.addData("camera x", robotPoseMT2.getPosition().x);
-                telemetry.addData("camera y", robotPoseMT2.getPosition().y);
-                telemetry.addData("camera z", robotPoseMT2.getPosition().z);
+                telemetry.addData("camera x MT2", robotPoseMT2.getPosition().x);
+                telemetry.addData("camera y MT2", robotPoseMT2.getPosition().y);
+                telemetry.addData("camera z MT2", robotPoseMT2.getPosition().z);*/
 
                 // print out data from results
                 telemetry.addData("target x", result.getTx());
                 telemetry.addData("target y", result.getTy());
                 //telemetry.addData("distance", result.getBotposeAvgDist());
                 telemetry.addData("camera yaw", robotPose.getOrientation().getYaw());
-                telemetry.addData("camera x", robotPose.getPosition().x);
-                telemetry.addData("camera y", robotPose.getPosition().y);
-                telemetry.addData("camera z", robotPose.getPosition().z);
-                telemetry.addData("BotposeAvgDist", cameraDistance);
+                telemetry.addData("camera x MT1 inches", cameraYInches);
+                telemetry.addData("camera y MT1 inches", cameraYInches);
+                telemetry.addData("camera z MT1 meters?", robotPose.getPosition().z);
+                telemetry.addData("BotposeAvgDist m?", cameraDistance);
+                telemetry.addData("BotposeAvgDist Inches", cameraDistanceInches);
+
+                double estimateDistance = getDistanceFromTag(result.getTa());
+
+
+                double tagArea = result.getTa();
+                telemetry.addData("resultArea", tagArea);
             }
 
             driver1.readButtons();
@@ -180,11 +190,11 @@ public class TeleOpV7 extends LinearOpMode {
                 double rx = 0;
 
                 double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
-                if (team&&distanceToTarget>80) {
+                /*if (team&&distanceToTarget>130) {
                     goalAngle-=3;
                 } else {
                     goalAngle+=3;
-                }
+                }*/
                 double currentAngle = Math.toDegrees(drive.localizer.getPose().heading.toDouble());
                 goalAngle+=360;
                 goalAngle%=360;
@@ -192,17 +202,17 @@ public class TeleOpV7 extends LinearOpMode {
                 currentAngle%=360;
                 double difference = ((goalAngle-currentAngle+540)%360)-180;
 
-                if(targetLock) {
-                    if (Math.abs(difference) < 20) {
+                /*if(targetLock) {
+                    if (Math.abs(difference) < 10) {
                         limelight.setPollRateHz(25);
                     } else {
                         limelight.setPollRateHz(50);
                     }
                 } else {
                     limelight.setPollRateHz(15);
-                }
+                }*/
 
-                if(targetLock&&distanceToLoadingZone>25) {
+                if(targetLock){//&&distanceToLoadingZone>5) {
                     /*double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     if (team&&distanceToTarget>80) {
                         goalAngle-=3;
@@ -216,34 +226,44 @@ public class TeleOpV7 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;*/
 
-                    if(!(tagX==10000)&&Math.abs(difference)<30&&distanceToTarget<80) {
+                    if(!(tagX==10000)){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
                             rx=(tagX-5)/-40;
                         }*/
-                        /*if(distanceToTarget>80){
+                        /*if(distanceToTarget>130){
                             if(team) {
-                                rx = (tagX + 4) / -40.0;
+                                rx = (tagX + 2) / -50.0;
                             } else {
-                                rx = (tagX - 4) / -40.0;
+                                rx = (tagX - 2) / -50.0;
                             }
                         } else {
                             rx=tagX/-40.0;
                         }*/
-                        rx=tagX/-40.0;
-                        //rx = (difference / 55) * -1;
-                    } else if (Math.abs(difference)>30) {
-                        rx = (difference / 55) * -1;
+                        /*if(Math.abs(tagX)<20) {
+                            rx = tagX / -60.0;
+                        } else {
+                            rx = (difference / 55) * -1;
+                        }*/
+                        //rx = (difference / 45) * -1;
+                        rx = tagX / -60.0;
+                    /*} else if (Math.abs(difference)>45) {
+                        rx = (difference / 55) * -1;*/
                     } else {
                         rx = (difference / 90) * -1;
                     }
 
-                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<10){
+                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<20){
+                        rx=0.05*(rx/Math.abs(rx));
+                    }
+
+                    //rx=0.05*(rx/Math.abs(rx));
+                    /*if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<20){
                         rx=0.05*(rx/Math.abs(rx));
                     } else if (rx<0.1&&rx>-0.1){
                         rx=0.1*(rx/Math.abs(rx));
-                    }
+                    }*/
 
                     if (rx > 1) {
                         rx = 1;
@@ -397,6 +417,14 @@ public class TeleOpV7 extends LinearOpMode {
             telemetry.addData("pose heading", Math.toDegrees(drive.localizer.getPose().heading.toDouble()));
             telemetry.update();
         }
+    }
+
+    public double getDistanceFromTag(double targetArea) {
+        // you will have to get this value for your own camera by graphing the target area
+        // at different known distances
+        double scale = 30665.95/495;
+        double distance = scale / targetArea;
+        return distance;
     }
 
     public static double interpolate(double[][] table, double x) {
