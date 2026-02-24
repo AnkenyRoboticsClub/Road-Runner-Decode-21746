@@ -212,7 +212,7 @@ public class TeleOpV7 extends LinearOpMode {
                     limelight.setPollRateHz(15);
                 }*/
 
-                if(targetLock){//&&distanceToLoadingZone>5) {
+                if(targetLock&&distanceToLoadingZone>20){//&&distanceToLoadingZone>5) {
                     /*double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     if (team&&distanceToTarget>80) {
                         goalAngle-=3;
@@ -226,7 +226,7 @@ public class TeleOpV7 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;*/
 
-                    if(!(tagX==10000)){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
+                    if(!(tagX==10000)&&Math.abs(difference)<15){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
@@ -254,7 +254,7 @@ public class TeleOpV7 extends LinearOpMode {
                         rx = (difference / 90) * -1;
                     }
 
-                    if ((rx<0.05&&rx>-0.05)&&Math.abs(difference)<20){
+                    if (rx<0.05&&rx>-0.05){
                         rx=0.05*(rx/Math.abs(rx));
                     }
 
@@ -398,9 +398,9 @@ public class TeleOpV7 extends LinearOpMode {
             if (driver1.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON)) {
                 loadingZoneX-=9;
                 if(team){
-                    loadingZoneY-=9;
+                    loadingZoneY-=(9+5);
                 } else {
-                    loadingZoneY+=9;
+                    loadingZoneY+=(9+5);
                 }
                 drive.localizer.setPose(new Pose2d(loadingZoneX,loadingZoneY, drive.localizer.getPose().heading.toDouble()));
             }
