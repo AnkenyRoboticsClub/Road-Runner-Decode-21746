@@ -247,14 +247,19 @@ public class TeleOpV7 extends LinearOpMode {
                             rx = (difference / 55) * -1;
                         }*/
                         //rx = (difference / 45) * -1;
-                        if(distanceToTarget>0){
+                        if(distanceToTarget>135){
                             if(team){
                                 rx = (tagX + 3)/-60;
                             } else {
                                 rx = (tagX - 3) /-60;
                             }
                         } else {
-                            rx = tagX / -60.0;
+                            rx=tagX / -60.0;
+                            /*if(team){
+                                rx = (tagX + 1)/-60;
+                            } else {
+                                rx = (tagX - 1) /-60;
+                            }*/
                         }
                         //rx = tagX / -60.0;
                     /*} else if (Math.abs(difference)>45) {
