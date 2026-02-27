@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
 import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name = "AutoRedBackV3", group = "Autonomous")
@@ -30,8 +31,8 @@ public class AutoRedBackV3 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                .afterTime(0, launcher.setLauncherVelocity(1230))
-                .strafeToLinearHeading(new Vector2d(55, 20), Math.toRadians(157))
+                .afterTime(0, launcher.setLauncherVelocity(1315))
+                .strafeToLinearHeading(new Vector2d(55, 20), Math.toRadians(160))
                 .build();
 
         // would drive.localizer.getPose() work here instead of making our own pose?
@@ -51,6 +52,7 @@ public class AutoRedBackV3 extends LinearOpMode {
         );
 
         Actions.runBlocking(fullAuto);
+        PoseStorage.currentPose = drive.localizer.getPose();
 
     }
 

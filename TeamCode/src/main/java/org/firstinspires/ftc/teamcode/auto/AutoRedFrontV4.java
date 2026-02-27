@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.Gate;
 import org.firstinspires.ftc.teamcode.Mechanisms.Launcher;
+import org.firstinspires.ftc.teamcode.PoseStorage;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 @Autonomous(name = "AutoRedFrontV4", group = "Autonomous")
@@ -51,6 +52,7 @@ public class AutoRedFrontV4 extends LinearOpMode {
         );
 
         Actions.runBlocking(fullAuto);
+        PoseStorage.currentPose = drive.localizer.getPose();
 
     }
 

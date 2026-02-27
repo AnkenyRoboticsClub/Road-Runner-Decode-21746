@@ -212,7 +212,7 @@ public class TeleOpV7 extends LinearOpMode {
                     limelight.setPollRateHz(15);
                 }*/
 
-                if(targetLock&&distanceToLoadingZone>20){//&&distanceToLoadingZone>5) {
+                if(targetLock){//&&distanceToLoadingZone>20){//&&distanceToLoadingZone>5) {
                     /*double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     if (team&&distanceToTarget>80) {
                         goalAngle-=3;
@@ -226,7 +226,7 @@ public class TeleOpV7 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;*/
 
-                    if(!(tagX==10000)&&Math.abs(difference)<15){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
+                    if(!(tagX==10000)&&Math.abs(difference)<30){//&&Math.abs(difference)<15){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
@@ -251,11 +251,18 @@ public class TeleOpV7 extends LinearOpMode {
                     /*} else if (Math.abs(difference)>45) {
                         rx = (difference / 55) * -1;*/
                     } else {
-                        rx = (difference / 90) * -1;
+                        if (Math.abs(difference)>30&&launcher.launcher2.getVelocity()<500){
+                            rx = (difference / 90) * -1;
+                        } else {
+                            rx = 0;
+                        }
                     }
 
-                    if (rx<0.05&&rx>-0.05){
-                        rx=0.05*(rx/Math.abs(rx));
+                    //league meet maybe change rx mins to 0.1 and -0.1
+                    if(rx!=0) {
+                        if (rx < 0.05 && rx > -0.05) {
+                            rx = 0.05 * (rx / Math.abs(rx));
+                        }
                     }
 
                     //rx=0.05*(rx/Math.abs(rx));
