@@ -39,10 +39,10 @@ public class TeleOpV7 extends LinearOpMode {
             {0, 1000},
             {45, 1000},
             {100, 1060},
-            {120, 1190},//usually 1200
+            {120, 1150},//usually 1200
             {135, 1290},
-            {150, 1315},//1280
-            {160, 1335},
+            {150, 1305},//1280
+            {160, 1330},
             {100000000, 1335}
     };
 
@@ -247,11 +247,20 @@ public class TeleOpV7 extends LinearOpMode {
                             rx = (difference / 55) * -1;
                         }*/
                         //rx = (difference / 45) * -1;
-                        rx = tagX / -60.0;
+                        if(distanceToTarget>0){
+                            if(team){
+                                rx = (tagX + 3)/-60;
+                            } else {
+                                rx = (tagX - 3) /-60;
+                            }
+                        } else {
+                            rx = tagX / -60.0;
+                        }
+                        //rx = tagX / -60.0;
                     /*} else if (Math.abs(difference)>45) {
                         rx = (difference / 55) * -1;*/
                     } else {
-                        if (Math.abs(difference)>30&&launcher.launcher2.getVelocity()<500){
+                        if (/*Math.abs(difference)>30&&*/launcher.launcher2.getVelocity()<500){
                             rx = (difference / 90) * -1;
                         } else {
                             rx = 0;
