@@ -31,7 +31,7 @@ public class AutoRedFrontV4 extends LinearOpMode {
         if (isStopRequested()) return;
 
         Action lineUp = drive.actionBuilder(initialPose)
-                .afterTime(0, launcher.setLauncherVelocity(1050))
+                .afterTime(0, launcher.setLauncherVelocity(1040))
                 .strafeToLinearHeading(new Vector2d(-20, 20), Math.toRadians(135))
                 .build();
 
