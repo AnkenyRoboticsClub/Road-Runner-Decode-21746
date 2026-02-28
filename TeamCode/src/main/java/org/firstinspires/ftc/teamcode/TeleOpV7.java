@@ -212,7 +212,7 @@ public class TeleOpV7 extends LinearOpMode {
                     limelight.setPollRateHz(15);
                 }*/
 
-                if(targetLock){//&&distanceToLoadingZone>20){//&&distanceToLoadingZone>5) {
+                if(targetLock&&!(tagX==10000)){//&&distanceToLoadingZone>20){//&&distanceToLoadingZone>5) {
                     /*double goalAngle = Math.toDegrees(Math.atan2(goalY-drive.localizer.getPose().position.y, goalX-drive.localizer.getPose().position.x));
                     if (team&&distanceToTarget>80) {
                         goalAngle-=3;
@@ -226,7 +226,7 @@ public class TeleOpV7 extends LinearOpMode {
                     currentAngle%=360;
                     double difference = ((goalAngle-currentAngle+540)%360)-180;*/
 
-                    if(!(tagX==10000)&&Math.abs(difference)<30){//&&Math.abs(difference)<15){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
+                    if(!(tagX==10000)){//&&Math.abs(difference)<30){//&&Math.abs(difference)<15){//&&Math.abs(difference)<30){//&&distanceToTarget<130) {
                         /*if(distanceToTarget<80||team){
                             rx=(tagX-2)/-40;
                         } else {
@@ -249,9 +249,9 @@ public class TeleOpV7 extends LinearOpMode {
                         //rx = (difference / 45) * -1;
                         if(distanceToTarget>135){
                             if(team){
-                                rx = (tagX + 3)/-60;
+                                rx = (tagX + 0.5)/-60;
                             } else {
-                                rx = (tagX - 3) /-60;
+                                rx = (tagX - 0.5) /-60;
                             }
                         } else {
                             rx=tagX / -60.0;
@@ -331,7 +331,7 @@ public class TeleOpV7 extends LinearOpMode {
             if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
                 launcherAutoVelocity = false;
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(1100)
+                        launcher.setLauncherVelocity(1050)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.B)) {
@@ -343,11 +343,15 @@ public class TeleOpV7 extends LinearOpMode {
             if (driver2.wasJustPressed(GamepadKeys.Button.X)) {
                 launcherAutoVelocity = false;
                 runningActions.add(new ParallelAction(
-                        launcher.setLauncherVelocity(1300)
+                        launcher.setLauncherVelocity(1315)
                 ));
             }
             if (driver2.wasJustPressed(GamepadKeys.Button.Y)) {
-                launcherAutoVelocity = true;
+                //launcherAutoVelocity = true;
+                launcherAutoVelocity = false;
+                runningActions.add(new ParallelAction(
+                        launcher.setLauncherVelocity(1270)
+                ));
             }
 
             /*if (driver2.wasJustPressed(GamepadKeys.Button.A)) {
